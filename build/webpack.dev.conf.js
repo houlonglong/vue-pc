@@ -4,6 +4,19 @@ const webpack = require('webpack')
 const config = require('../config')
 const merge = require('webpack-merge')
 const path = require('path')
+const express = require('express')
+const jsonServer = require('json-server')
+const app = express() 
+const apiServer = jsonServer.create()
+const apiRouter = jsonServer.router('db.json')
+const middlewares = jsonServer.defaults()
+apiServer.use(middlewares)
+apiServer.use(apiRouter)
+apiServer.listen(3000, () => {
+  console.log('JSON Server is running')
+})
+// var apiRoutes = express.Router()
+// app.use('/api', apiRoutes)
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -42,7 +55,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
-    }
+    },
+    // before(app) {
+    //   app.get('/api/someApi', (req, res) => {
+    //     res.json({
+    //        "aa":1
+    //     })
+    //   })
+    // }
   },
   plugins: [
     new webpack.DefinePlugin({

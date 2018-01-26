@@ -42,7 +42,14 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+  created(){
+    this.$http.get('getList')
+    .then(function(data){},function(err){
+      console.log(err)
+    })
+  },
   data () {
     return {
        boardList: [
