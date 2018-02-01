@@ -10,13 +10,9 @@ const app = express()
 const apiServer = jsonServer.create()
 const apiRouter = jsonServer.router('db.json')
 const middlewares = jsonServer.defaults()
-apiServer.use(middlewares)
-apiServer.use(apiRouter)
-apiServer.listen(3000, () => {
-  console.log('JSON Server is running')
-})
+
 // var apiRoutes = express.Router()
-// app.use('/api', apiRoutes)
+
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -91,6 +87,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port
   portfinder.getPort((err, port) => {
+    apiServer.use(middlewares)
+    apiServer.use('/api', apiRouter)
+    apiServer.listen(port+1, () => {
+      console.log('JSON Server is running')
+    })
     if (err) {
       reject(err)
     } else {
@@ -98,7 +99,6 @@ module.exports = new Promise((resolve, reject) => {
       process.env.PORT = port
       // add port to devServer config
       devWebpackConfig.devServer.port = port
-
       // Add FriendlyErrorsPlugin
       devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
