@@ -4,12 +4,40 @@ const webpack = require('webpack')
 const config = require('../config')
 const merge = require('webpack-merge')
 const path = require('path')
+var fs = require('fs')
 const express = require('express')
-const jsonServer = require('json-server')
-const app = express() 
-const apiServer = jsonServer.create()
-const apiRouter = jsonServer.router('db.json')
-const middlewares = jsonServer.defaults()
+const apiServer = express() 
+var bodyParser = require('body-parser')
+apiServer.use(bodyParser.urlencoded({ extended: true }))
+apiServer.use(bodyParser.json())
+var apiRouter = express.Router()
+apiRouter.route('/:apiName')
+.all(function (req, res) {
+  fs.readFile('./db.json', 'utf8', function (err, data) {
+    if (err) throw err
+    var data = JSON.parse(data)
+    if (data[req.params.apiName]) {
+      res.json(data[req.params.apiName])  
+    }
+    else {
+      res.send('no such api name')
+    }   
+  })
+})
+
+
+apiServer.use('/api', apiRouter);
+apiServer.listen( config.dev.port + 1, function (err) {
+  if (err) {
+    console.log(err)
+    return
+  }
+  console.log('Listening at http://localhost:' + ( config.dev.port + 1) + '\n')
+})
+// const jsonServer = require('json-server')
+// const apiServer = jsonServer.create()
+// const apiRouter = jsonServer.router('db.json')
+// const middlewares = jsonServer.defaults()
 
 // var apiRoutes = express.Router()
 
@@ -87,11 +115,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port
   portfinder.getPort((err, port) => {
-    apiServer.use(middlewares)
-    apiServer.use('/api', apiRouter)
-    apiServer.listen(port+1, () => {
-      console.log('JSON Server is running')
-    })
     if (err) {
       reject(err)
     } else {
