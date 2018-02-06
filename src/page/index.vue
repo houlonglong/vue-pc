@@ -25,13 +25,13 @@
       </div>
     </div>
     <div class="index-right">
-      <slide-show :slides = "slides" ></slide-show>
+      <slide-show :slides = "slides"  @onchange="doSomeThingOnSlideChangge"></slide-show>
       <div class="index-board-list">
         <div class="index-board-item index-board-car"
          v-for="(item,index) in boardList"  :class="[{'line-last' : index % 2 !== 0}, 'index-board-' + item.id]">
           <div class="index-board-item-inner" >
             <h2>{{item.title}}</h2>
-            <p>{{item.description}}}</p>
+            <p>{{item.description}}</p>
             <div class="index-board-button">
               <a href="" class="button">立即购买</a>
             </div>
@@ -159,6 +159,10 @@ export default {
          
       ]
   
+    }
+  },
+  methods:{
+    doSomeThingOnSlideChangge(index){
     }
   }
 }

@@ -5,9 +5,9 @@
          <img src="../assets/logo.png" alt="">
           <div class="head-nav">
             <ul class="nav-list">
-              <li>登录</li>
-              <li class="nav-pile">注册</li>
-              <li class="nav-pile">关于</li>
+              <li @click="loginClick">登录</li>
+              <li class="nav-pile"  @click="regClick">注册</li>
+              <li @click="aboutClick" class="nav-pile">关于</li>
             </ul>
          </div>
      </div>
@@ -22,15 +22,49 @@
      <div class="app-foot">
       <p>© 2016 随便写写，玩玩</p>
     </div>
+    <my-dialog :is-show="isShowAboutDialog"  @on-close="closeDialog('isShowAboutDialog')">
+       <p> 京东于2004年正式涉足电商领域。2016年，京东集团市场交易额达到9392亿元*，净收入达到2601亿元，同比增长43%。京东是中国收入规模最大的互联网企业。2016年7月，京东入榜2016《财富》全球500强，成为中国首家、唯一入选的互联网企业。
+2014年5月，京东集团在美国纳斯达克证券交易所正式挂牌上市，是中国第一个成功赴美上市的大型综合型电商平台，并成功跻身全球前十大互联网公司排行榜，2015年7月，京东凭借高成长性入选纳斯达克100指数和纳斯达克100平均加权指数。</p>
+    </my-dialog>
+    <my-dialog :is-show="isShowLoginDialog"  @on-close="closeDialog('isShowLoginDialog')">
+       <login-form></login-form> 
+    </my-dialog>
+    <my-dialog :is-show="isShowRegDialog"  @on-close="closeDialog('isShowRegDialog')">
+       <reg-form></reg-form>
+    </my-dialog>
 </div>
  
 </template>
-
+ 
 <script>
+import Dialog from './dialog'
+import loginForm from './loginForm'
+import regForm from './regForm'
 export default {
+   components:{
+     MyDialog:Dialog,
+     loginForm,
+     regForm
+   },
   data () {
     return {
-  
+      isShowAboutDialog:false,
+      isShowRegDialog:false,
+      isShowLoginDialog:false,
+    }
+  },
+  methods:{
+    aboutClick(){ 
+     this.isShowAboutDialog=true
+    },
+    loginClick(){
+      this.isShowLoginDialog=true
+    },
+    regClick(){
+      this.isShowRegDialog = true
+    },
+    closeDialog(attr){
+      this[attr] = false
     }
   }
 }
