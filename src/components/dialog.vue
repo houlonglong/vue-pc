@@ -35,7 +35,7 @@ export default {
 
 <style scoped>
 .drop-enter-active {
-  transition: all .5s ease;
+  transition: all .6s ease;
 }
 .drop-leave-active {
   transition: all .3s ease;
