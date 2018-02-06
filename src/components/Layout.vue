@@ -5,8 +5,11 @@
          <img src="../assets/logo.png" alt="">
           <div class="head-nav">
             <ul class="nav-list">
-              <li @click="loginClick">登录</li>
-              <li class="nav-pile"  @click="regClick">注册</li>
+              <li>{{ username }}</li>
+              <li v-if="username!==''" class="nav-pile"> | </li>
+               <li v-if="username !==''" @click="outloginClick">退出</li>
+              <li v-if="username ===''" @click="loginClick">登录</li>
+              <li v-if="username ===''" class="nav-pile"  @click="regClick">注册</li>
               <li @click="aboutClick" class="nav-pile">关于</li>
             </ul>
          </div>
@@ -27,7 +30,7 @@
 2014年5月，京东集团在美国纳斯达克证券交易所正式挂牌上市，是中国第一个成功赴美上市的大型综合型电商平台，并成功跻身全球前十大互联网公司排行榜，2015年7月，京东凭借高成长性入选纳斯达克100指数和纳斯达克100平均加权指数。</p>
     </my-dialog>
     <my-dialog :is-show="isShowLoginDialog"  @on-close="closeDialog('isShowLoginDialog')">
-       <login-form></login-form> 
+       <login-form @has-log="onSucessLog"></login-form> 
     </my-dialog>
     <my-dialog :is-show="isShowRegDialog"  @on-close="closeDialog('isShowRegDialog')">
        <reg-form></reg-form>
@@ -51,6 +54,7 @@ export default {
       isShowAboutDialog:false,
       isShowRegDialog:false,
       isShowLoginDialog:false,
+      username:''
     }
   },
   methods:{
@@ -65,7 +69,15 @@ export default {
     },
     closeDialog(attr){
       this[attr] = false
+    },
+    onSucessLog(data,attr){
+       this.username = data.username
+       this.closeDialog('isShowLoginDialog')
+    },
+    outloginClick(){
+        this.username = ''
     }
+     
   }
 }
 </script>
@@ -157,6 +169,7 @@ body {
 .head-nav li {
   cursor: pointer;
   float: left;
+  padding-left: 10px;
 }
 .nav-pile {
   padding: 0 10px;
