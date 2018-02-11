@@ -71,7 +71,7 @@ export default {
         {
           src: require('../assets/slideShow/pic3.jpg'),
           title: 'xxx3',
-          href: 'detail/publish'
+          href: 'http://xxx.xxx.com'
         },
         {
           src: require('../assets/slideShow/pic4.jpg'),

@@ -18,7 +18,7 @@
                   产品类型：
               </div>
               <div class="sales-board-line-right">
-                  <v-selection :selections="buyTypes" ></v-selection>
+                  <v-selection :selections="buyTypes"  @on-change="onParamChange('buyType', $event)" ></v-selection>
               </div>
           </div>
           <div class="sales-board-line">
@@ -52,7 +52,7 @@
           <div class="sales-board-line">
               <!-- <div class="sales-board-line-left">&nbsp;</div> -->
               <div class="sales-board-line-right">
-                  <div class="button" @click="showPayDialog">
+                  <div class="button">
                     立即购买
                   </div>
               </div>
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-
+import _ from 'lodash'
 import VSelection from '../../components/selection'
 import VCounter from '../../components/counter'
 import VChooser from '../../components/chooser'
@@ -99,6 +99,11 @@ export default{
   },
   data(){
       return{
+        buyNum: 0,
+        buyType: {},
+        versions: [],
+        period: {},
+      price: 0,
         buyTypes: [
             {
             label: '入门版',
@@ -142,6 +147,38 @@ export default{
             }
          ],
     }
+  },
+  methods:{
+      onParamChange(attr,value){
+         this[attr] = value
+         console.log(attr,  this[attr] )
+         this.getPrice()
+      },
+      getPrice(){
+            let buyVersionsArray = _.map(this.versions, (item) => {
+                return item.value
+            })
+            console.log(buyVersionsArray,'buyVersionsArray')
+             let reqParams = {
+                    buyNumber: this.buyNum,
+                    buyType: this.buyType.value,
+                    period: this.period.value,
+                    version: buyVersionsArray.join(',')
+                 }
+          this.$http.post('/api/getPrice',reqParams)
+          .then((res)=>{
+              this.price = res.data.amount
+              console.log(res)
+          })
+      }
+
+  },
+    mounted () {
+    this.buyNum = 1
+    this.buyType = this.buyTypes[0]
+    this.versions = [this.versionList[0]]
+    this.period = this.periodList[0]
+    this.getPrice()
   }
 }
 </script>
