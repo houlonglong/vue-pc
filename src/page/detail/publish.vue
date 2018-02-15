@@ -252,9 +252,10 @@
 </template>
 
 <script>
-import VSelection from '../../components/selection'
-import VCounter from '../../components/counter'
-import VMulChooser from '../../components/multiplyChooser'
+import VSelection from '../../components/base/selection'
+import VCounter from '../../components/base/counter'
+import VChooser from '../../components/base/chooser'
+import VMulChooser from '../../components/base/multiplyChooser'
 export default {
   components: {
     VSelection,
